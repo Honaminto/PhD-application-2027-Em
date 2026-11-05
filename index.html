@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>PhD Application Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Shown until you are signed in as the owner -->
+<div class="wrap gate" id="gate">
+  <div class="card">
+    <span class="eyebrow">PhD Application Tracker</span>
+    <h2 id="gateTitle">Sign in to your tracker</h2>
+    <p class="muted" id="gateText">Only you can open this dashboard. Recommenders use their own private links.</p>
+    <div class="row" id="gateActions">
+      <button type="button" id="signIn">Sign in with Google</button>
+    </div>
+  </div>
+</div>
+
+<div id="appRoot" hidden>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-top">
+        <div style="display:grid;gap:6px">
+          <span class="eyebrow">Economics PhD · Fall 2027 entry</span>
+          <h1>PhD Application Tracker</h1>
+        </div>
+        <span class="small muted" id="today"></span>
+      </div>
+      <div class="hero-grid">
+        <div class="countdown">
+          <span class="eyebrow">Next deadline</span>
+          <div class="big" id="cdBig">–</div>
+          <div class="who" id="cdWho">Add a program to start the countdown</div>
+          <div class="when" id="cdWhen">&nbsp;</div>
+        </div>
+        <div class="stats">
+          <div><span class="eyebrow">Submitted</span><span class="v" id="stSub">0<span>/0</span></span><div class="meter" id="mSub"><i style="width:0"></i></div></div>
+          <div><span class="eyebrow">Letters in</span><span class="v" id="stLet">0<span>/0</span></span><div class="meter" id="mLet"><i style="width:0"></i></div></div>
+          <div><span class="eyebrow">Required done</span><span class="v" id="stReq">0<span>/0</span></span><div class="meter" id="mReq"><i style="width:0"></i></div></div>
+        </div>
+      </div>
+      <div id="banner" class="banner" hidden></div>
+    </header>
+  </div>
+
+  <div class="tabs"><div class="wrap">
+    <nav aria-label="Sections">
+      <a href="#overview" data-tab="overview">Overview</a>
+      <a href="#programs" data-tab="programs">Programs <span class="n" id="nProg">0</span></a>
+      <a href="#recommenders" data-tab="recommenders">Recommenders <span class="n" id="nRec">0</span></a>
+      <a href="#links" data-tab="links">Links <span class="n" id="nLink">0</span></a>
+      <a href="#profile" data-tab="profile">Profile</a>
+    </nav>
+    <button type="button" class="quiet" id="signOut" style="padding:5px 10px;font-size:13px">Sign out</button>
+  </div></div>
+
+  <main class="wrap">
+    <section class="view" id="v-overview">
+      <div class="ov">
+        <div style="display:grid;gap:12px">
+          <div class="vhead"><h2>Deadline timeline</h2><span class="small muted">Tap a school to open it</span></div>
+          <div class="card tl" id="timeline"></div>
+        </div>
+        <div class="side">
+          <div style="display:grid;gap:12px">
+            <h2>Needs attention</h2>
+            <div class="card todo"><ul id="todo"></ul></div>
+          </div>
+          <div style="display:grid;gap:12px">
+            <h2>By country</h2>
+            <div class="card countries" id="byCountry"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="v-programs" hidden>
+      <div class="vhead"><h2>Programs</h2>
+        <div class="legend"><span class="pill req">Required</span><span class="pill rec">Recommended</span><span class="pill opt">Optional</span><span class="pill done">Done</span></div>
+      </div>
+      <form class="card addbar p" id="addProg">
+        <label class="f">University<input type="text" id="apSchool" placeholder="e.g. University of Michigan" required></label>
+        <label class="f">Country<input type="text" id="apCountry" list="countryList" placeholder="e.g. United States"></label>
+        <label class="f">Program<input type="text" id="apName" placeholder="PhD in Economics"></label>
+        <label class="f">Deadline<input type="date" id="apDate"></label>
+        <button type="submit" id="apBtn">Add program</button>
+      </form>
+      <div class="filters" id="filters" role="group" aria-label="Filter by country"></div>
+      <div class="plist" id="progList"></div>
+    </section>
+
+    <section class="view" id="v-recommenders" hidden>
+      <div class="vhead"><h2>Recommenders</h2><span class="small muted">Assign them to schools from each program</span></div>
+      <form class="card addbar r" id="addRec">
+        <label class="f">Name<input type="text" id="arName" placeholder="Full name" required></label>
+        <label class="f">Affiliation<input type="text" id="arAff" placeholder="University"></label>
+        <label class="f">Email<input type="email" id="arEmail" placeholder="name@university.edu"></label>
+        <button type="submit">Add recommender</button>
+      </form>
+      <div class="rlist" id="recList"></div>
+    </section>
+
+    <section class="view" id="v-links" hidden>
+      <div class="vhead"><h2>Links</h2><span class="small muted">Portals, program pages, faculty, anything you return to</span></div>
+      <form class="card addbar l" id="addLink">
+        <label class="f">Label<input type="text" id="alLabel" placeholder="e.g. Michigan econ faculty" required></label>
+        <label class="f">Address<input type="url" id="alUrl" placeholder="https://" required></label>
+        <label class="f">Type<select id="alCat"><option>Portal</option><option>Program page</option><option>Faculty</option><option>Funding</option><option>Other</option></select></label>
+        <button type="submit">Save link</button>
+      </form>
+      <div id="linkList" style="display:grid;gap:18px"></div>
+    </section>
+
+    <section class="view" id="v-profile" hidden>
+      <div class="vhead"><h2>Profile</h2><span class="small muted">Shown to recommenders on their page</span></div>
+      <div class="card profile">
+        <div class="fields">
+          <label class="f">Your name<input type="text" id="pfName" data-pf="name" placeholder="Emile Djohi"></label>
+          <label class="f">Your email<input type="email" id="pfEmail" data-pf="email" placeholder="you@example.com"></label>
+        </div>
+        <div class="block">
+          <h3>Materials for recommenders</h3>
+          <p class="small muted">Links to files they might want while writing (Google Drive, Dropbox, your website). Leave blank to hide.</p>
+          <div class="fields">
+            <label class="f">CV<input type="url" id="pfCv" data-pf="cv" placeholder="https://"></label>
+            <label class="f">Statement of purpose<input type="url" id="pfSop" data-pf="sop" placeholder="https://"></label>
+            <label class="f">Writing sample<input type="url" id="pfWs" data-pf="ws" placeholder="https://"></label>
+            <label class="f">Transcripts or other<input type="url" id="pfOther" data-pf="other" placeholder="https://"></label>
+          </div>
+        </div>
+        <span class="small muted" id="pfSaved"></span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<datalist id="countryList">
+  <option>United States</option><option>Canada</option><option>United Kingdom</option><option>France</option>
+  <option>Germany</option><option>Switzerland</option><option>Netherlands</option><option>Italy</option>
+  <option>Spain</option><option>Sweden</option><option>Belgium</option><option>Australia</option>
+</datalist>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

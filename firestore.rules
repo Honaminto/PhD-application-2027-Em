@@ -1,0 +1,39 @@
+rules_version = '2';
+
+// Who can do what:
+//  - You (the owner, signed in with Google) can read and change everything.
+//  - A recommender who has their private link can read ONLY their own page
+//    and can ONLY change the status of letters already assigned to them.
+//  - Nobody else can read anything.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      // Replace with the user ID shown on the dashboard after your first sign-in.
+      return request.auth != null && request.auth.uid == "PASTE_YOUR_USER_ID";
+    }
+
+    // Your private data
+    match /programs/{id}     { allow read, write: if isOwner(); }
+    match /recommenders/{id} { allow read, write: if isOwner(); }
+    match /links/{id}        { allow read, write: if isOwner(); }
+    match /settings/{id}     { allow read, write: if isOwner(); }
+
+    // One page per recommender, addressed by a long random code in their link
+    match /shares/{token} {
+      allow get: if isOwner() || token.size() >= 24;     // knowing the code is the key
+      allow list, create, delete: if isOwner();            // nobody else can browse the codes
+      allow update: if isOwner() || (
+        // a recommender may only touch these two fields...
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["letters", "lastUpdateBy"])
+        && request.resource.data.lastUpdateBy == "recommender"
+        // ...cannot add or remove schools...
+        && request.resource.data.letters.keys().hasOnly(resource.data.letters.keys())
+        && resource.data.letters.keys().hasOnly(request.resource.data.letters.keys())
+        // ...and can change only one letter at a time
+        && request.resource.data.letters.diff(resource.data.letters).affectedKeys().size() <= 1
+      );
+    }
+  }
+}

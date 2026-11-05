@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Recommendation Letters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="wrap" style="max-width:820px">
+  <header class="rs-hero">
+    <span class="eyebrow" id="rsEyebrow">Recommendation letters</span>
+    <h1 id="rsTitle">Loading your letters…</h1>
+    <p id="rsIntro"></p>
+  </header>
+
+  <div id="rsBody" hidden style="display:grid;gap:26px;padding-top:14px">
+    <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div><span class="eyebrow">Submitted</span><span class="v" id="rsDone">0<span>/0</span></span><div class="meter" id="rsMeter"><i style="width:0"></i></div></div>
+      <div><span class="eyebrow">Next due</span><span class="v" id="rsNext">–</span><span class="small muted" id="rsNextS"></span></div>
+      <div><span class="eyebrow">Schools</span><span class="v" id="rsCount">0</span><span class="small muted" id="rsCountries"></span></div>
+    </div>
+
+    <section style="display:grid;gap:12px">
+      <div class="vhead"><h2>Your letters</h2><span class="small muted">Tap a button to update. Changes save instantly.</span></div>
+      <div class="rs-list" id="rsList"></div>
+    </section>
+
+    <section style="display:grid;gap:12px" id="rsMatSec" hidden>
+      <h2>Materials</h2>
+      <div class="card" id="rsMaterials"></div>
+    </section>
+
+    <div id="rsNote" class="banner" hidden></div>
+  </div>
+
+  <footer class="footer" id="rsFoot">This page is private to you through this link. Please don't forward it.</footer>
+</main>
+<script type="module" src="js/recommender.js"></script>
+</body>
+</html>
