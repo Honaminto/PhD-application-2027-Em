@@ -11,4 +11,4 @@ export const firebaseConfig = {
 
 // After your first sign-in, the dashboard shows your user ID. Paste it here
 // AND in firestore.rules, then publish the rules.
-export const OWNER_UID = "PASTE_YOUR_USER_ID";
+export const OWNER_UID = "YDeL2XahDKM0Quzl2sCu1uN3dYE3";
